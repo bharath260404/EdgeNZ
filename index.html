@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Callroll.ai — AI attendance follow-ups for schools and colleges</title>
+  <meta name="description" content="Teachers mark attendance. Callroll.ai messages every absent student's parent on WhatsApp, calls them in their language, and records the reason for you.">
+  <meta property="og:title" content="Callroll.ai — Every absence, followed up.">
+  <meta property="og:description" content="AI staff for schools and colleges: WhatsApp alerts, AI calls to parents, and absence reasons recorded automatically.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#1D4ED8">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============================== NAV ============================== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand" aria-label="Callroll.ai home">
+      <img src="favicon.svg" alt="" width="32" height="32">
+      <span>Callroll<em>.ai</em></span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#demo">Live demo</a>
+      <a href="#features">Features</a>
+      <a href="#portals">Schools &amp; colleges</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact" class="btn btn-primary btn-sm nav-cta">Book a demo</a>
+    </nav>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============================== HERO ============================== -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <span class="eyebrow"><span class="dot"></span> AI staff for schools &amp; colleges</span>
+      <h1>Every absence,<br>followed up. <span class="grad">Automatically.</span></h1>
+      <p class="lead">
+        Teachers mark attendance. Callroll.ai messages each absent student's parent on WhatsApp,
+        calls them in their language, and records the reason — so your staff don't have to.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary btn-lg">Book a free demo</a>
+        <a href="#demo" class="btn btn-ghost btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          Try the live demo
+        </a>
+      </div>
+      <ul class="hero-points">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Official WhatsApp Business Platform</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Calls in English, Hindi, Telugu, Tamil &amp; more</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Nothing for parents to install</li>
+      </ul>
+    </div>
+
+    <!-- Animated phone: the whole workflow in one loop -->
+    <div class="hero-visual reveal" aria-label="Example: a parent receives a WhatsApp alert and an AI call about their child's absence">
+      <div class="float-card float-a" data-seq="1">
+        <span class="fc-icon">8A</span>
+        <div><strong>Class 8 A saved</strong><small>2 absent · 34 present</small></div>
+      </div>
+
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-head">
+          <img src="favicon.svg" alt="" width="34" height="34">
+          <div><strong>Green Valley School</strong><small>Official business account</small></div>
+        </div>
+        <div class="phone-body">
+          <div class="chat-day">Today</div>
+          <div class="bubble in" data-seq="2">
+            Dear Mrs. Reddy, <b>Diya</b> was marked absent at Green Valley School today. Our assistant will call you shortly to note the reason.
+            <span class="meta">9:02 <span class="ticks">✓✓</span></span>
+          </div>
+          <div class="call-card" data-seq="3">
+            <div class="call-avatar">
+              <span class="ring"></span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+            </div>
+            <div class="call-text">
+              <strong>Callroll.ai Assistant</strong>
+              <small>Calling in Telugu…</small>
+            </div>
+            <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="bubble out" data-seq="4">
+            She has a fever. She'll be back on Monday.
+            <span class="meta">Parent · on call</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card float-b" data-seq="5">
+        <span class="fc-icon check">✓</span>
+        <div><strong>Reason recorded</strong><small>Fever · returns Monday</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== BEFORE / AFTER ============================== -->
+<section class="section section-tint" id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Why Callroll.ai</span>
+      <h2>Morning follow-ups shouldn't eat your staff's day.</h2>
+    </div>
+
+    <div class="compare reveal">
+      <div class="switch" role="tablist" aria-label="Compare">
+        <button role="tab" aria-selected="true" data-compare="before" class="active">Without Callroll.ai</button>
+        <button role="tab" aria-selected="false" data-compare="after">With Callroll.ai</button>
+        <span class="switch-pill" aria-hidden="true"></span>
+      </div>
+
+      <div class="compare-grid" data-compare-panel="before">
+        <div class="compare-item"><span class="ci-num">1–2 hrs</span><p>of staff time every morning calling parents one by one</p></div>
+        <div class="compare-item"><span class="ci-num">Notebooks</span><p>Reasons scribbled on paper, lost by next week</p></div>
+        <div class="compare-item"><span class="ci-num">Too late</span><p>Long absences noticed only at exam time</p></div>
+      </div>
+
+      <div class="compare-grid is-hidden" data-compare-panel="after">
+        <div class="compare-item good"><span class="ci-num">0 calls</span><p>Staff make no calls; every absent student's parent is contacted automatically</p></div>
+        <div class="compare-item good"><span class="ci-num">One place</span><p>Every reason, transcript and confirmation saved against the student</p></div>
+        <div class="compare-item good"><span class="ci-num">Same day</span><p>Attendance shortages flagged while there's still time to act</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== HOW IT WORKS ============================== -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">How it works</span>
+      <h2>Four steps. One of them is yours.</h2>
+      <p>Your teacher marks attendance. Callroll.ai does the rest.</p>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-steps" role="tablist" aria-label="Workflow steps">
+        <button class="flow-step active" role="tab" aria-selected="true" data-step="0">
+          <span class="fs-num">1</span>
+          <span class="fs-text"><strong>Mark attendance</strong><small>Teacher, about 30 seconds</small></span>
+          <span class="fs-bar"><i></i></span>
+        </button>
+        <button class="flow-step" role="tab" aria-selected="false" data-step="1">
+          <span class="fs-num">2</span>
+          <span class="fs-text"><strong>WhatsApp alert</strong><small>Sent to the parent instantly</small></span>
+          <span class="fs-bar"><i></i></span>
+        </button>
+        <button class="flow-step" role="tab" aria-selected="false" data-step="2">
+          <span class="fs-num">3</span>
+          <span class="fs-text"><strong>AI call</strong><small>In the parent's language</small></span>
+          <span class="fs-bar"><i></i></span>
+        </button>
+        <button class="flow-step" role="tab" aria-selected="false" data-step="3">
+          <span class="fs-num">4</span>
+          <span class="fs-text"><strong>Reason recorded</strong><small>Saved to your dashboard</small></span>
+          <span class="fs-bar"><i></i></span>
+        </button>
+      </div>
+
+      <div class="flow-stage">
+        <!-- 1. Register -->
+        <div class="flow-panel active" data-panel="0">
+          <div class="panel-copy">
+            <h3>Teachers mark attendance like always</h3>
+            <p>Tap <b>Mark rest present</b>, then tap the few who are absent. Works on any phone or laptop, with keyboard shortcuts for speed.</p>
+          </div>
+          <div class="mock mock-register">
+            <div class="mock-top"><strong>Class 8 A</strong><span>Today · 36 students</span></div>
+            <div class="reg-row"><span>Aarav Sharma</span><em class="st p">Present</em></div>
+            <div class="reg-row"><span>Diya Reddy</span><em class="st a">Absent</em></div>
+            <div class="reg-row"><span>Kabir Khan</span><em class="st p">Present</em></div>
+            <div class="reg-row"><span>Ananya Iyer</span><em class="st l">Late</em></div>
+            <div class="mock-save">Save attendance</div>
+          </div>
+        </div>
+
+        <!-- 2. WhatsApp -->
+        <div class="flow-panel" data-panel="1">
+          <div class="panel-copy">
+            <h3>The parent gets a WhatsApp message</h3>
+            <p>Sent from your school's verified business account on WhatsApp's official platform. You can see when each message is delivered and read.</p>
+          </div>
+          <div class="mock mock-wa">
+            <div class="bubble in static">
+              Dear Mrs. Reddy, <b>Diya</b> was marked absent at Green Valley School today. Our assistant will call you shortly to note the reason.
+              <span class="meta">9:02 <span class="ticks">✓✓</span></span>
+            </div>
+            <div class="wa-status"><span class="pill">Sent</span><span class="pill">Delivered</span><span class="pill on">Read</span></div>
+          </div>
+        </div>
+
+        <!-- 3. Call -->
+        <div class="flow-panel" data-panel="2">
+          <div class="panel-copy">
+            <h3>Callroll.ai calls and asks — politely</h3>
+            <p>A natural voice in the parent's preferred language asks why the student is absent and when they'll return. No answer? The case is flagged so staff can retry with one tap.</p>
+          </div>
+          <div class="mock mock-call">
+            <div class="call-big">
+              <span class="ring big"></span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+            </div>
+            <div class="script">
+              <p class="ai"><b>Assistant:</b> Namaskaram, I'm calling from Green Valley School about Diya…</p>
+              <p class="pa"><b>Parent:</b> She has a fever. Back on Monday.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Dashboard -->
+        <div class="flow-panel" data-panel="3">
+          <div class="panel-copy">
+            <h3>The reason lands in your dashboard</h3>
+            <p>Reason, parent confirmation and the full call transcript are saved against the student — searchable, reportable, and ready for the class teacher.</p>
+          </div>
+          <div class="mock mock-dash">
+            <div class="mock-top"><strong>Absence reasons</strong><span>Today</span></div>
+            <div class="dash-row">
+              <div><b>Diya Reddy</b><small>8 A · Mrs. Reddy</small></div>
+              <div class="dash-reason">“Fever, back Monday”<span class="pill on">Confirmed</span></div>
+            </div>
+            <div class="dash-row">
+              <div><b>Rohan Das</b><small>9 B · Mr. Das</small></div>
+              <div class="dash-reason">“Family function”<span class="pill on">Confirmed</span></div>
+            </div>
+            <div class="dash-row">
+              <div><b>Meera Nair</b><small>10 A · Mrs. Nair</small></div>
+              <div class="dash-reason muted">Calling…<span class="pill">In progress</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== LIVE DEMO ============================== -->
+<section class="section section-dark" id="demo">
+  <div class="container">
+    <div class="section-head light reveal">
+      <span class="kicker">Live demo</span>
+      <h2>Try it yourself.</h2>
+      <p>Tap students to mark them absent, then save. Watch Callroll.ai follow up.</p>
+    </div>
+
+    <div class="demo reveal">
+      <div class="demo-card">
+        <div class="demo-head">
+          <div><strong>Class 8 A</strong><small>Attendance register</small></div>
+          <button class="link-btn" id="demo-reset" type="button">Reset</button>
+        </div>
+        <ul class="demo-register" id="demo-register"></ul>
+        <button class="btn btn-primary btn-block" id="demo-save" type="button">Save attendance</button>
+        <p class="demo-hint" id="demo-hint">Tip: tap a name to mark them absent.</p>
+      </div>
+
+      <div class="demo-card demo-track">
+        <div class="demo-head">
+          <div><strong>Follow-ups</strong><small>Updated live</small></div>
+          <div class="demo-stats">
+            <span><b id="stat-absent">0</b> absent</span>
+            <span><b id="stat-done">0</b> reasons</span>
+          </div>
+        </div>
+        <ul class="demo-cases" id="demo-cases">
+          <li class="demo-empty">No absences yet. Mark someone absent and save.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="demo-note">Simulation with sample students. Real alerts go through WhatsApp's official platform.</p>
+  </div>
+</section>
+
+<!-- ============================== FEATURES ============================== -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Features</span>
+      <h2>Everything a school office needs. Nothing it doesn't.</h2>
+    </div>
+
+    <div class="features">
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></span>
+        <h3>WhatsApp alerts</h3>
+        <p>Official, verified messages to parents with delivered and read status.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2 4.6 1V20A17 17 0 0 1 3 4h4l1 4.6z"/></svg></span>
+        <h3>AI voice calls</h3>
+        <p>Natural calls in the parent's language. Every call transcribed.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></span>
+        <h3>Fast registers</h3>
+        <p>Mark rest present, keyboard shortcuts, copy from the previous period.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
+        <h3>Reports &amp; shortages</h3>
+        <p>Attendance %, students below the minimum, and classes needed to recover.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>
+        <h3>Live follow-up tracker</h3>
+        <p>See every case: queued, messaged, calling, reason recorded. Retry in one tap.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span>
+        <h3>AI assistant for staff</h3>
+        <p>Ask “Who was absent three days this week?” and get the answer instantly.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/></svg></span>
+        <h3>Admin &amp; teacher roles</h3>
+        <p>Teachers see only their own classes — enforced on the server, not just hidden.</p>
+      </article>
+      <article class="feature reveal">
+        <span class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
+        <h3>Private by design</h3>
+        <p>Each institution's data is kept separate and never sold or used for ads.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SCHOOL / COLLEGE ============================== -->
+<section class="section section-tint" id="portals">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Built for both</span>
+      <h2>A portal that fits how you teach.</h2>
+      <p>Schools and colleges take attendance differently. Callroll.ai adapts.</p>
+    </div>
+
+    <div class="portals reveal">
+      <div class="switch wide" role="tablist" aria-label="Institution type">
+        <button role="tab" aria-selected="true" data-portal="school" class="active">School</button>
+        <button role="tab" aria-selected="false" data-portal="college">College</button>
+        <span class="switch-pill" aria-hidden="true"></span>
+      </div>
+
+      <div class="portal-card" data-portal-panel="school">
+        <dl>
+          <div><dt>Marked per</dt><dd>Class &amp; section, once a day</dd></div>
+          <div><dt>Statuses</dt><dd><span class="pill">Present</span><span class="pill">Absent</span><span class="pill">Late</span><span class="pill">Leave</span></dd></div>
+          <div><dt>Reports</dt><dd>Daily attendance % for every student</dd></div>
+          <div><dt>Parent follow-up</dt><dd>Every absent student, every day</dd></div>
+        </dl>
+      </div>
+
+      <div class="portal-card is-hidden" data-portal-panel="college">
+        <dl>
+          <div><dt>Marked per</dt><dd>Course &amp; teaching period</dd></div>
+          <div><dt>Statuses</dt><dd><span class="pill">Present</span><span class="pill">Absent</span><span class="pill">Late</span><span class="pill">On duty</span></dd></div>
+          <div><dt>Reports</dt><dd>Course-wise %, shortage below your minimum, classes needed or safe to miss</dd></div>
+          <div><dt>Parent follow-up</dt><dd>Student absent for the whole day, or as many periods as you set</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="roles">
+      <div class="role reveal">
+        <span class="role-tag">Principal &amp; office</span>
+        <h3>See the whole institution</h3>
+        <ul>
+          <li>Dashboard of today's attendance and follow-ups</li>
+          <li>Create teachers, classes and courses</li>
+          <li>Reports, settings, and messages from teachers</li>
+        </ul>
+      </div>
+      <div class="role reveal">
+        <span class="role-tag">Teachers</span>
+        <h3>Only what's theirs</h3>
+        <ul>
+          <li>Sign in with a username — no email needed</li>
+          <li>Mark attendance for their allotted classes</li>
+          <li>See reasons and reports for their students</li>
+        </ul>
+      </div>
+      <div class="role reveal">
+        <span class="role-tag">Parents</span>
+        <h3>Nothing to install</h3>
+        <ul>
+          <li>A WhatsApp message they already know how to read</li>
+          <li>A short call in their own language</li>
+          <li>Peace of mind that the school is paying attention</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TRUST ============================== -->
+<section class="section" id="trust">
+  <div class="container trust">
+    <div class="trust-copy reveal">
+      <span class="kicker">Trust &amp; privacy</span>
+      <h2>Student data deserves care.</h2>
+      <p>Callroll.ai processes data only to run attendance follow-ups for your institution — under your control.</p>
+      <a href="privacy.html" class="text-link">Read our privacy policy →</a>
+    </div>
+    <ul class="trust-list">
+      <li class="reveal"><b>Separate per institution</b><span>No school can ever see another's data.</span></li>
+      <li class="reveal"><b>Role-based access</b><span>Checked on every request by the server.</span></li>
+      <li class="reveal"><b>Official channels only</b><span>Meta's WhatsApp Business Platform — no unofficial tools.</span></li>
+      <li class="reveal"><b>Never sold</b><span>No ads, no data sharing beyond running the service.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================== FAQ ============================== -->
+<section class="section section-tint" id="faq">
+  <div class="container narrow">
+    <div class="section-head reveal">
+      <span class="kicker">FAQ</span>
+      <h2>Questions schools ask us.</h2>
+    </div>
+
+    <div class="faq reveal">
+      <details>
+        <summary>Do parents need to install an app?</summary>
+        <p>No. They get a normal WhatsApp message and a normal phone call.</p>
+      </details>
+      <details>
+        <summary>Which languages does the AI speak?</summary>
+        <p>English, Hindi, Telugu and Tamil, with more Indian languages being added. Each parent is contacted in the language set on their student record.</p>
+      </details>
+      <details>
+        <summary>What if the parent doesn't answer?</summary>
+        <p>The case is marked for attention in your follow-up tracker, so staff can retry with one tap or call personally.</p>
+      </details>
+      <details>
+        <summary>Can a teacher see other classes?</summary>
+        <p>No. Teachers only see the classes allotted to them, and this is enforced by the server on every request.</p>
+      </details>
+      <details>
+        <summary>How long does setup take?</summary>
+        <p>Usually a day. We import your students from a spreadsheet, you add your teachers, and you're live.</p>
+      </details>
+      <details>
+        <summary>What does it cost?</summary>
+        <p>Start with a free pilot for one class. After that, pricing is per student per year based on your size — contact us for a quote.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CONTACT ============================== -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="cta reveal">
+      <div class="cta-copy">
+        <h2>See Callroll.ai with your own school.</h2>
+        <p>A 20-minute demo, then a free pilot with one class. No commitment.</p>
+        <ul class="contact-lines">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg>
+            <a href="mailto:hello@callroll.ai" data-contact-email>hello@callroll.ai</a>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2 4.6 1V20A17 17 0 0 1 3 4h4l1 4.6z"/></svg>
+            <a href="tel:+910000000000">+91 00000 00000</a>
+          </li>
+        </ul>
+      </div>
+
+      <form class="cta-form" id="contact-form" novalidate>
+        <div class="field-row">
+          <label>Your name<input name="name" required autocomplete="name"></label>
+          <label>Phone<input name="phone" type="tel" required autocomplete="tel" placeholder="+91"></label>
+        </div>
+        <label>School or college<input name="institution" required autocomplete="organization"></label>
+        <label>Number of students
+          <select name="size">
+            <option>Under 300</option>
+            <option>300 – 1,000</option>
+            <option>1,000 – 3,000</option>
+            <option>Over 3,000</option>
+          </select>
+        </label>
+        <button class="btn btn-white btn-block btn-lg" type="submit">Request a demo</button>
+        <p class="form-note" id="form-note">Opens your email app with the details filled in.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <a href="#top" class="brand light">
+        <img src="favicon.svg" alt="" width="28" height="28">
+        <span>Callroll<em>.ai</em></span>
+      </a>
+      <p class="footer-tag">AI staff for schools and colleges.</p>
+    </div>
+    <div>
+      <h4>Product</h4>
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#demo">Live demo</a>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <a href="#contact">Contact</a>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="terms.html">Terms of service</a>
+    </div>
+    <div>
+      <h4>Reach us</h4>
+      <a href="mailto:hello@callroll.ai">hello@callroll.ai</a>
+      <a href="tel:+910000000000">+91 00000 00000</a>
+      <address>Your address, City, State – PIN, India</address>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span id="year">2026</span> Callroll.ai. All rights reserved.</span>
+    <span>Made in India 🇮🇳</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
