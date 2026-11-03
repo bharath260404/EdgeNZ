@@ -147,6 +147,177 @@
   }
 
   // ============================================================
+  // SAMPLE CALLS (audio and captions come from calls.js)
+  // ============================================================
+
+  const BARS = 44;
+  let currentAudio = null;
+
+  const clock = (seconds) => {
+    const s = Math.max(0, Math.round(seconds));
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  };
+
+  const speakerName = (call, line) => (line.who === "ai" ? call.agent : "Parent");
+  const lineAt = (call, t) => [...call.lines].reverse().find((l) => l.start <= t);
+
+  // Bars follow the script: tall while someone speaks, low in the pauses.
+  function waveBars(call) {
+    let seed = [...call.id].reduce((n, c) => n + c.charCodeAt(0), 0);
+    const random = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+
+    return Array.from({ length: BARS }, (_, n) => {
+      const t = ((n + 0.5) / BARS) * call.duration;
+      const line = lineAt(call, t);
+      const next = line && call.lines[call.lines.indexOf(line) + 1];
+      const end = (next ? next.start : call.duration) - 0.5;
+      const speaking = line && t < end;
+      return {
+        height: speaking ? 35 + random() * 65 : 12 + random() * 8,
+        who: line ? line.who : "ai",
+      };
+    });
+  }
+
+  function callCard(call) {
+    const card = document.createElement("article");
+    card.className = "call";
+    card.innerHTML = `
+      <div class="call-top">
+        <span>${call.kicker}</span>
+        <span class="call-time">${clock(call.duration)}</span>
+      </div>
+      <h3>${call.title}</h3>
+      <div class="call-agent">
+        <span class="call-initial">${call.agent[0]}</span>
+        <span><b>${call.agent}</b> · ${call.voiceLabel}</span>
+        <span class="call-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2 4.6 1V20A17 17 0 0 1 3 4h4l1 4.6z"/><path d="M15 3h6v6M21 3l-6.5 6.5"/></svg>
+          Outbound
+        </span>
+      </div>
+      <div class="call-player">
+        <button class="call-play" type="button" aria-label="Play sample call: ${call.title}">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="call-wave" role="slider" tabindex="0" aria-label="Position in call"
+             aria-valuemin="0" aria-valuemax="${Math.round(call.duration)}" aria-valuenow="0" aria-valuetext="0:00">
+          ${waveBars(call).map((b) => `<i class="${b.who}" style="height:${b.height.toFixed(0)}%"></i>`).join("")}
+        </div>
+      </div>
+      <div class="call-caption" aria-live="polite"></div>
+      <details class="call-transcript">
+        <summary>Read transcript</summary>
+        <ol>${call.lines.map((l) => `
+          <li class="${l.who}"><b>${speakerName(call, l)}:</b> ${l.text}${l.en ? `<small>${l.en}</small>` : ""}</li>`).join("")}
+        </ol>
+      </details>`;
+
+    const audio = new Audio();
+    audio.preload = "none";
+    const playBtn = $(".call-play", card);
+    const wave = $(".call-wave", card);
+    const bars = $$("i", wave);
+    const time = $(".call-time", card);
+    const caption = $(".call-caption", card);
+    let shownLine = null;
+
+    function showOutcome() {
+      shownLine = null;
+      caption.innerHTML = `<span class="cap-idle">Outcome: <b>${call.outcome}</b></span>`;
+    }
+
+    function render() {
+      const t = audio.currentTime;
+      const played = (t / call.duration) * BARS;
+      bars.forEach((bar, n) => bar.classList.toggle("on", n < played));
+      time.textContent = t > 0 ? clock(t) : clock(call.duration);
+      wave.setAttribute("aria-valuenow", String(Math.round(t)));
+      wave.setAttribute("aria-valuetext", clock(t));
+
+      const line = t > 0 && lineAt(call, t + 0.05);
+      if (line && line !== shownLine) {
+        shownLine = line;
+        caption.innerHTML = `
+          <span class="cap-who ${line.who}">${speakerName(call, line)}</span>
+          <span class="cap-text">${line.text}${line.en ? `<small>${line.en}</small>` : ""}</span>`;
+      }
+    }
+
+    // Load the MP3 only when the visitor first plays or seeks.
+    function load() {
+      if (audio.src) return;
+      audio.preload = "auto";
+      audio.src = call.src;
+    }
+
+    function play() {
+      load();
+      if (currentAudio && currentAudio !== audio) currentAudio.pause();
+      currentAudio = audio;
+      audio.play().catch(() => card.classList.remove("playing", "loading"));
+    }
+
+    function seek(seconds) {
+      const to = Math.min(Math.max(seconds, 0), call.duration - 0.1);
+      load();
+      // Chrome ignores a seek before the file's length is known.
+      if (audio.readyState >= 1) {
+        audio.currentTime = to;
+        render();
+      } else {
+        audio.addEventListener("loadedmetadata", () => {
+          audio.currentTime = to;
+          render();
+        }, { once: true });
+      }
+    }
+
+    playBtn.addEventListener("click", () => (audio.paused ? play() : audio.pause()));
+
+    wave.addEventListener("click", (event) => {
+      const rect = wave.getBoundingClientRect();
+      seek(((event.clientX - rect.left) / rect.width) * call.duration);
+      play();
+    });
+
+    wave.addEventListener("keydown", (event) => {
+      const step = { ArrowRight: 5, ArrowLeft: -5 }[event.key];
+      if (step) {
+        event.preventDefault();
+        seek(audio.currentTime + step);
+      } else if (event.key === " " || event.key === "Enter") {
+        event.preventDefault();
+        audio.paused ? play() : audio.pause();
+      }
+    });
+
+    audio.addEventListener("play", () => {
+      card.classList.add("playing");
+      playBtn.setAttribute("aria-label", `Pause sample call: ${call.title}`);
+    });
+    audio.addEventListener("pause", () => {
+      card.classList.remove("playing", "loading");
+      playBtn.setAttribute("aria-label", `Play sample call: ${call.title}`);
+    });
+    audio.addEventListener("waiting", () => card.classList.add("loading"));
+    audio.addEventListener("playing", () => card.classList.remove("loading"));
+    audio.addEventListener("timeupdate", render);
+    audio.addEventListener("ended", () => {
+      audio.currentTime = 0;
+      render();
+      showOutcome();
+    });
+
+    showOutcome();
+    return card;
+  }
+
+  const callsList = $("#calls-list");
+  (window.SAMPLE_CALLS || []).forEach((call) => callsList.appendChild(callCard(call)));
+
+  // ============================================================
   // LIVE DEMO
   // ============================================================
 
