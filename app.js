@@ -290,7 +290,7 @@
     saved = true;
     renderRegister();
     saveBtn.disabled = true;
-    hint.textContent = "Saved. Callroll.ai is following up — no calls from you.";
+    hint.textContent = "Saved. Callroll AI is following up — no calls from you.";
     casesEl.innerHTML = "";
     statAbsent.textContent = absent.size;
     [...absent].sort((a, b) => a - b).forEach((index, order) => runFollowUp(index, order));

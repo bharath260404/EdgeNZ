@@ -1,5 +1,5 @@
 /* ============================================================
-   Callroll.ai — blue & white
+   Callroll AI — blue & white
    ============================================================ */
 
 :root {
@@ -566,6 +566,6 @@ button { font: inherit; cursor: pointer; }
 .legal + .footer .footer-bottom { margin-top: 0; }
 .footer-bottom a { color: var(--blue-100); }
 
-/* ".ai" in the wordmark */
+/* "AI" in the wordmark */
 .brand em { font-style: normal; color: var(--blue-600); }
 .brand.light em { color: var(--blue-300); }
