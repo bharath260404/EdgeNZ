@@ -3,13 +3,75 @@ window.SAMPLE_CALLS = [
   {
     "id": "telugu-demo",
     "kicker": "School · Telugu",
-    "title": "Talks to a parent in Telugu about an absence",
-    "agent": "Callroll AI",
+    "title": "Calls Nithya's father and records a sick day",
+    "agent": "Amulya",
     "voiceLabel": "Telugu",
-    "outcome": null,
+    "outcome": "Fever · back to school Monday",
     "src": "audio/telugu-demo.mp3",
     "duration": 45.84,
-    "lines": []
+    "lines": [
+      {
+        "who": "ai",
+        "text": "Hello, namaskaram sir. I'm Amulya from Green Valley School.",
+        "start": 0.0
+      },
+      {
+        "who": "ai",
+        "text": "Am I speaking with Nithya's father?",
+        "start": 5.5
+      },
+      {
+        "who": "parent",
+        "text": "Hello, namaste madam. Yes, I'm Nithya's father. Tell me.",
+        "start": 7.9
+      },
+      {
+        "who": "ai",
+        "text": "Sir, Nithya didn't come to school today. May I know the reason?",
+        "start": 13.5
+      },
+      {
+        "who": "parent",
+        "text": "Yes madam. She has had a high fever since last night. That's why she didn't come.",
+        "start": 19.2
+      },
+      {
+        "who": "parent",
+        "text": "We took her to the doctor today.",
+        "start": 24.0
+      },
+      {
+        "who": "ai",
+        "text": "I see, sir. What did the doctor say?",
+        "start": 26.4
+      },
+      {
+        "who": "parent",
+        "text": "The doctor said she should rest for two days. He gave her medicines and she's taking them.",
+        "start": 28.4
+      },
+      {
+        "who": "ai",
+        "text": "Okay sir. When will Nithya be back at school?",
+        "start": 33.6
+      },
+      {
+        "who": "parent",
+        "text": "She'll come back from Monday, madam.",
+        "start": 37.6
+      },
+      {
+        "who": "ai",
+        "text": "Okay sir. Please take care of her. Thank you for your time.",
+        "start": 40.3
+      },
+      {
+        "who": "parent",
+        "text": "Okay madam. Thank you.",
+        "start": 44.1
+      }
+    ],
+    "transcriptLabel": "Read English translation"
   },
   {
     "id": "hindi-wedding",
@@ -63,7 +125,8 @@ window.SAMPLE_CALLS = [
         "start": 34.54,
         "en": "Thank you. I've noted it: family wedding, back from Thursday. The class teacher will be informed."
       }
-    ]
+    ],
+    "transcriptLabel": "Read transcript"
   },
   {
     "id": "english-college",
@@ -110,6 +173,7 @@ window.SAMPLE_CALLS = [
         "text": "Thank you, sir. Have a good day.",
         "start": 45.29
       }
-    ]
+    ],
+    "transcriptLabel": "Read transcript"
   }
 ];

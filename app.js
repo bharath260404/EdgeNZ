@@ -210,7 +210,7 @@
       <div class="call-caption" aria-live="polite"></div>
       ${call.lines.length ? `
       <details class="call-transcript">
-        <summary>Read transcript</summary>
+        <summary>${call.transcriptLabel}</summary>
         <ol>${call.lines.map((l) => `
           <li class="${l.who}"><b>${speakerName(call, l)}:</b> ${l.text}${l.en ? `<small>${l.en}</small>` : ""}</li>`).join("")}
         </ol>
