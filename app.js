@@ -171,7 +171,8 @@
       const line = lineAt(call, t);
       const next = line && call.lines[call.lines.indexOf(line) + 1];
       const end = (next ? next.start : call.duration) - 0.5;
-      const speaking = line && t < end;
+      // A recording without captions has no pauses to show.
+      const speaking = !call.lines.length || (line && t < end);
       return {
         height: speaking ? 35 + random() * 65 : 12 + random() * 8,
         who: line ? line.who : "ai",
@@ -207,12 +208,13 @@
         </div>
       </div>
       <div class="call-caption" aria-live="polite"></div>
+      ${call.lines.length ? `
       <details class="call-transcript">
         <summary>Read transcript</summary>
         <ol>${call.lines.map((l) => `
           <li class="${l.who}"><b>${speakerName(call, l)}:</b> ${l.text}${l.en ? `<small>${l.en}</small>` : ""}</li>`).join("")}
         </ol>
-      </details>`;
+      </details>` : ""}`;
 
     const audio = new Audio();
     audio.preload = "none";
@@ -225,7 +227,10 @@
 
     function showOutcome() {
       shownLine = null;
-      caption.innerHTML = `<span class="cap-idle">Outcome: <b>${call.outcome}</b></span>`;
+      caption.innerHTML = call.outcome
+        ? `<span class="cap-idle">Outcome: <b>${call.outcome}</b></span>`
+        : `<span class="cap-idle">Press play to listen.</span>`;
+      caption.hidden = !call.outcome && !call.lines.length;
     }
 
     function render() {
