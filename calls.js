@@ -71,7 +71,8 @@ window.SAMPLE_CALLS = [
         "start": 44.1
       }
     ],
-    "transcriptLabel": "Read English translation"
+    "transcriptLabel": "Read English translation",
+    "locked": false
   },
   {
     "id": "hindi-wedding",
@@ -80,53 +81,11 @@ window.SAMPLE_CALLS = [
     "agent": "Priya",
     "voiceLabel": "Hindi",
     "outcome": "Family wedding · back Thursday",
-    "src": "audio/hindi-wedding.mp3",
-    "duration": 45.67,
-    "lines": [
-      {
-        "who": "ai",
-        "text": "नमस्ते, मैं सनराइज़ पब्लिक स्कूल से प्रिया बोल रही हूँ। क्या मेरी बात आरव के पिताजी से हो रही है?",
-        "start": 0.29,
-        "en": "Namaste, this is Priya from Sunrise Public School. Am I speaking with Aarav's father?"
-      },
-      {
-        "who": "parent",
-        "text": "हाँ जी, बोलिए।",
-        "start": 10.22,
-        "en": "Yes, go ahead."
-      },
-      {
-        "who": "ai",
-        "text": "आज आरव स्कूल नहीं आया। क्या आप बता सकते हैं क्यों?",
-        "start": 13.08,
-        "en": "Aarav didn't come to school today. Could you tell me why?"
-      },
-      {
-        "who": "parent",
-        "text": "हम दो दिन के लिए गाँव में एक शादी में आए हुए हैं।",
-        "start": 19.25,
-        "en": "We've come to our village for a wedding for two days."
-      },
-      {
-        "who": "ai",
-        "text": "अच्छा जी। तो आरव गुरुवार से स्कूल आएगा?",
-        "start": 25.25,
-        "en": "I see. So Aarav will be back at school from Thursday?"
-      },
-      {
-        "who": "parent",
-        "text": "हाँ जी, गुरुवार से पक्का।",
-        "start": 30.86,
-        "en": "Yes, from Thursday for sure."
-      },
-      {
-        "who": "ai",
-        "text": "धन्यवाद। मैंने दर्ज कर लिया है, परिवार में शादी, गुरुवार से वापस। क्लास टीचर को बता दिया जाएगा।",
-        "start": 34.54,
-        "en": "Thank you. I've noted it: family wedding, back from Thursday. The class teacher will be informed."
-      }
-    ],
-    "transcriptLabel": "Read transcript"
+    "src": null,
+    "duration": 0,
+    "lines": [],
+    "transcriptLabel": "Read transcript",
+    "locked": true
   },
   {
     "id": "english-college",
@@ -135,45 +94,10 @@ window.SAMPLE_CALLS = [
     "agent": "Priya",
     "voiceLabel": "English",
     "outcome": "No reason given · advisor to call back",
-    "src": "audio/english-college.mp3",
-    "duration": 49.92,
-    "lines": [
-      {
-        "who": "ai",
-        "text": "Hello, this is Priya calling from St. Mary's Degree College. Am I speaking with Rahul's father?",
-        "start": 0.29
-      },
-      {
-        "who": "parent",
-        "text": "Yes, speaking.",
-        "start": 8.57
-      },
-      {
-        "who": "ai",
-        "text": "Rahul missed all his classes today, and his attendance in Physics is now seventy-two percent. May I know why he was absent?",
-        "start": 11.35
-      },
-      {
-        "who": "parent",
-        "text": "Oh, I didn't know that. He left home this morning saying he had college.",
-        "start": 21.34
-      },
-      {
-        "who": "ai",
-        "text": "I understand, sir. I've flagged this for his class advisor, Mrs. Lakshmi. She will call you this evening to talk it through.",
-        "start": 29.14
-      },
-      {
-        "who": "parent",
-        "text": "Yes, please. Thank you for letting me know.",
-        "start": 40.01
-      },
-      {
-        "who": "ai",
-        "text": "Thank you, sir. Have a good day.",
-        "start": 45.29
-      }
-    ],
-    "transcriptLabel": "Read transcript"
+    "src": null,
+    "duration": 0,
+    "lines": [],
+    "transcriptLabel": "Read transcript",
+    "locked": true
   }
 ];

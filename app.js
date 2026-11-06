@@ -180,7 +180,34 @@
     });
   }
 
+  // A language that is not ready: visible, but nothing to play.
+  function lockedCallCard(call) {
+    const card = document.createElement("article");
+    card.className = "call is-locked";
+    card.innerHTML = `
+      <div class="call-top">
+        <span>${call.kicker}</span>
+        <em class="soon">Coming soon</em>
+      </div>
+      <h3>${call.title}</h3>
+      <div class="call-agent">
+        <span class="call-initial">${call.agent[0]}</span>
+        <span><b>${call.agent}</b> · ${call.voiceLabel}</span>
+      </div>
+      <div class="call-player" aria-hidden="true">
+        <span class="call-lock">
+          <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
+        </span>
+        <div class="call-wave">
+          ${waveBars(call).map((b) => `<i style="height:${b.height.toFixed(0)}%"></i>`).join("")}
+        </div>
+      </div>`;
+    return card;
+  }
+
   function callCard(call) {
+    if (call.locked) return lockedCallCard(call);
+
     const card = document.createElement("article");
     card.className = "call";
     card.innerHTML = `
@@ -466,7 +493,7 @@
     saved = true;
     renderRegister();
     saveBtn.disabled = true;
-    hint.textContent = "Saved. Callroll AI is following up — no calls from you.";
+    hint.textContent = "Saved. This preview shows how follow-ups will work.";
     casesEl.innerHTML = "";
     statAbsent.textContent = absent.size;
     [...absent].sort((a, b) => a - b).forEach((index, order) => runFollowUp(index, order));

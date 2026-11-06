@@ -627,3 +627,110 @@ button { font: inherit; cursor: pointer; }
 /* "AI" in the wordmark */
 .brand em { font-style: normal; color: var(--blue-600); }
 .brand.light em { color: var(--blue-300); }
+
+/* Features that are not live yet */
+.soon {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--blue-100);
+  color: var(--blue-700);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.preview-tag {
+  position: absolute;
+  bottom: -26px;
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 100%;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.call.is-locked {
+  background: var(--blue-50);
+  box-shadow: none;
+}
+
+.call.is-locked h3,
+.call.is-locked .call-agent {
+  opacity: .7;
+}
+
+.call.is-locked .call-top {
+  align-items: center;
+  font-family: inherit;
+}
+
+.call.is-locked .call-top .soon {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.call.is-locked .call-wave {
+  cursor: default;
+  opacity: .5;
+}
+
+.call-lock {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue-100);
+  color: var(--blue-700);
+}
+
+.call-lock svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.more-languages {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.more-languages h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.more-languages ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.more-languages li {
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
