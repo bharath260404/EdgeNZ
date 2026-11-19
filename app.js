@@ -4,16 +4,35 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  // Runs `fn` once, the first time `el` scrolls into view.
+  function whenSeen(el, fn, threshold = 0.3) {
+    if (!el) return;
+    if (!("IntersectionObserver" in window)) return fn();
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        io.disconnect();
+        fn();
+      }
+    }, { threshold });
+    io.observe(el);
+  }
 
   // ============================================================
-  // NAV
+  // NAV, PROGRESS, YEAR
   // ============================================================
 
   const nav = $("#nav");
   const toggle = $("#nav-toggle");
   const links = $("#nav-links");
+  const progress = $("#progress");
 
-  const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 8);
+  const onScroll = () => {
+    nav.classList.toggle("scrolled", window.scrollY > 8);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (progress) progress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+  };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
@@ -24,11 +43,12 @@
   };
   toggle.addEventListener("click", () => setMenu(!links.classList.contains("open")));
   $$("a", links).forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (e) => e.key === "Escape" && setMenu(false));
 
   $("#year").textContent = new Date().getFullYear();
 
   // ============================================================
-  // REVEAL ON SCROLL
+  // REVEAL ON SCROLL, POINTER LIGHT ON CARDS
   // ============================================================
 
   if ("IntersectionObserver" in window && !reduceMotion) {
@@ -41,110 +61,346 @@
       }),
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
-    $$(".reveal").forEach((el, i) => {
-      el.style.transitionDelay = `${(i % 4) * 70}ms`;
+    $$(".reveal").forEach((el) => {
+      const siblings = $$(":scope > .reveal", el.parentElement);
+      el.style.transitionDelay = `${Math.max(0, siblings.indexOf(el)) % 4 * 80}ms`;
       io.observe(el);
     });
   } else {
     $$(".reveal").forEach((el) => el.classList.add("visible"));
   }
 
+  if (finePointer) {
+    $$(".spot").forEach((card) => card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--x", `${e.clientX - r.left}px`);
+      card.style.setProperty("--y", `${e.clientY - r.top}px`);
+    }));
+  }
+
+  // The feature strip loops: a second copy follows the first.
+  const marquee = $(".marquee-track");
+  if (marquee && !reduceMotion) {
+    $$(":scope > span", marquee).forEach((item) => {
+      const copy = item.cloneNode(true);
+      copy.setAttribute("aria-hidden", "true");
+      marquee.appendChild(copy);
+    });
+  }
+
   // ============================================================
-  // HERO PHONE LOOP
+  // HERO: numbers count up, bars grow, toasts take turns
   // ============================================================
 
-  const hero = $(".hero-visual");
-  const heroItems = $$("[data-seq]", hero).sort((a, b) => a.dataset.seq - b.dataset.seq);
-  const HERO_TIMES = [300, 1200, 2600, 4300, 5700];
-  const HERO_LOOP = 9500;
+  const stage = $("#hero-stage");
 
-  if (!reduceMotion) {
-    hero.classList.add("playing");
-    const play = () => {
-      heroItems.forEach((el) => el.classList.remove("shown"));
-      heroItems.forEach((el, i) => setTimeout(() => el.classList.add("shown"), HERO_TIMES[i]));
+  function countUp(el) {
+    const target = parseFloat(el.dataset.count);
+    const decimals = Number(el.dataset.decimals || 0);
+    if (reduceMotion) {
+      el.textContent = target.toFixed(decimals);
+      return;
+    }
+    const start = performance.now();
+    const ms = 1400;
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / ms);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = (target * eased).toFixed(decimals);
+      if (t < 1) requestAnimationFrame(step);
     };
-    play();
-    setInterval(play, HERO_LOOP);
+    requestAnimationFrame(step);
   }
 
-  // ============================================================
-  // SEGMENTED SWITCHES (before/after, school/college)
-  // ============================================================
+  whenSeen(stage, () => {
+    stage.classList.add("is-live");
+    $$("[data-count]", stage).forEach(countUp);
+  }, 0.2);
 
-  function setupSwitch(attr) {
-    const buttons = $$(`[data-${attr}]`);
-    if (!buttons.length) return;
-    const switchEl = buttons[0].closest(".switch");
+  const toasts = $$(".toast", stage);
+  let toastAt = 0;
+  if (toasts.length) {
+    toasts[0].classList.add("is-on");
+    if (!reduceMotion) {
+      setInterval(() => {
+        toasts[toastAt].classList.remove("is-on");
+        toastAt = (toastAt + 1) % toasts.length;
+        toasts[toastAt].classList.add("is-on");
+      }, 3200);
+    }
+  }
 
-    buttons.forEach((btn, index) => {
-      btn.addEventListener("click", () => {
-        buttons.forEach((b) => {
-          b.classList.toggle("active", b === btn);
-          b.setAttribute("aria-selected", String(b === btn));
-        });
-        switchEl.classList.toggle("right", index === 1);
-        $$(`[data-${attr}-panel]`).forEach((panel) => {
-          panel.classList.toggle("is-hidden", panel.dataset[`${attr}Panel`] !== btn.dataset[attr]);
-        });
-      });
+  // A gentle tilt that follows the pointer, on computers only.
+  const windowEl = $(".window", stage);
+  if (finePointer && !reduceMotion && windowEl) {
+    stage.addEventListener("pointermove", (e) => {
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      windowEl.style.transform = `rotateX(${(-y * 4).toFixed(2)}deg) rotateY(${(x * 5).toFixed(2)}deg)`;
     });
+    stage.addEventListener("pointerleave", () => (windowEl.style.transform = ""));
   }
 
-  setupSwitch("compare");
-  setupSwitch("portal");
-
   // ============================================================
-  // WORKFLOW STEPS (auto-advance until the visitor clicks)
+  // PLATFORM TOUR
   // ============================================================
 
-  const flow = $(".flow");
-  const steps = $$(".flow-step");
-  const panels = $$(".flow-panel");
-  const STEP_MS = 5000;
-  let stepIndex = 0;
-  let stepTimer = null;
-  let autoplay = !reduceMotion;
+  const tour = $("#tour");
+  const tabs = $$(".tour-tab", tour);
+  const panels = $$(".tour-panel", tour);
+  const TAB_MS = 8000;
+  let tabTimer = null;
+  let tabAuto = !reduceMotion;
+  let current = 0;
+  tour.style.setProperty("--tab-ms", `${TAB_MS}ms`);
 
-  flow.style.setProperty("--step-ms", `${STEP_MS}ms`);
+  const onShow = {};
 
-  function showStep(i) {
-    stepIndex = i;
-    steps.forEach((s, n) => {
-      s.classList.toggle("active", n === i);
-      s.setAttribute("aria-selected", String(n === i));
-      // Restart the progress bar animation.
-      const bar = $(".fs-bar i", s);
-      bar.style.animation = "none";
+  function showTab(index, focus = false) {
+    current = index;
+    tabs.forEach((tab, n) => {
+      const on = n === index;
+      tab.classList.toggle("is-on", on);
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+      const bar = $(".tab-bar", tab);
+      bar.style.display = "none";
       void bar.offsetWidth;
-      bar.style.animation = "";
+      bar.style.display = "";
     });
-    panels.forEach((p, n) => p.classList.toggle("active", n === i));
+    panels.forEach((panel, n) => (panel.hidden = n !== index));
+    if (focus) tabs[index].focus();
+    if (window.innerWidth <= 1100) {
+      tabs[index].scrollIntoView({ block: "nearest", inline: "center", behavior: reduceMotion ? "auto" : "smooth" });
+    }
+    onShow[tabs[index].dataset.tab]?.();
 
-    clearTimeout(stepTimer);
-    if (autoplay) stepTimer = setTimeout(() => showStep((i + 1) % steps.length), STEP_MS);
+    clearTimeout(tabTimer);
+    if (tabAuto) tabTimer = setTimeout(() => showTab((index + 1) % tabs.length), TAB_MS);
   }
 
-  steps.forEach((s, i) => s.addEventListener("click", () => {
-    autoplay = false;
-    flow.classList.add("paused");
-    showStep(i);
+  function stopAuto() {
+    tabAuto = false;
+    clearTimeout(tabTimer);
+    tour.classList.add("is-paused");
+  }
+
+  tabs.forEach((tab, n) => {
+    tab.addEventListener("click", () => {
+      stopAuto();
+      showTab(n);
+    });
+    tab.addEventListener("keydown", (e) => {
+      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!step) return;
+      e.preventDefault();
+      stopAuto();
+      showTab((n + step + tabs.length) % tabs.length, true);
+    });
+  });
+  // Someone using a panel shouldn't have it whisked away.
+  $(".tour-stage", tour).addEventListener("pointerdown", stopAuto);
+  $(".tour-stage", tour).addEventListener("focusin", stopAuto);
+  if (reduceMotion) tour.classList.add("is-paused");
+
+  // --- Attendance -------------------------------------------------------
+  const ROLL = [
+    ["01", "Aarav Sharma", "Day scholar"],
+    ["02", "Diya Reddy", "Hostel"],
+    ["03", "Kabir Khan", "Day scholar"],
+    ["04", "Ananya Iyer", "Day scholar"],
+    ["05", "Rohan Das", "Hostel"],
+  ];
+  const attList = $("#att-list");
+  const attSave = $("#att-save");
+  const away = new Set([1]);
+
+  function drawAttendance() {
+    attList.innerHTML = "";
+    ROLL.forEach(([roll, name, note], i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <button type="button" aria-pressed="${away.has(i)}">
+          <span class="roll">${roll}</span>
+          <span class="nm">${name}<small>${note}</small></span>
+          <span class="st">${away.has(i) ? "Absent" : "Present"}</span>
+        </button>`;
+      $("button", li).addEventListener("click", () => {
+        away.has(i) ? away.delete(i) : away.add(i);
+        attSave.classList.remove("is-saved");
+        attSave.textContent = "Save attendance";
+        drawAttendance();
+      });
+      attList.appendChild(li);
+    });
+    $("#att-present").textContent = ROLL.length - away.size;
+    $("#att-absent").textContent = away.size;
+  }
+  attSave.addEventListener("click", () => {
+    attSave.classList.add("is-saved");
+    attSave.textContent = "Saved ✓";
+  });
+  drawAttendance();
+
+  // --- Tests with AI ----------------------------------------------------
+  const typing = $("#ai-typing");
+  const questions = $$("#ai-questions .q");
+  const picked = $("#ai-picked");
+  const addBtn = $("#ai-add");
+  let aiTimers = [];
+
+  const countPicked = () => {
+    const n = questions.filter((q) => $("input", q).checked).length;
+    picked.textContent = `${n} question${n === 1 ? "" : "s"} ticked`;
+    addBtn.disabled = n === 0;
+  };
+  questions.forEach((q) => $("input", q).addEventListener("change", countPicked));
+  addBtn.addEventListener("click", () => {
+    const n = questions.filter((q) => $("input", q).checked).length;
+    addBtn.textContent = `Added ${n} ✓`;
+  });
+
+  onShow.tests = () => {
+    aiTimers.forEach(clearTimeout);
+    aiTimers = [];
+    addBtn.textContent = "Add to test";
+    if (reduceMotion) {
+      typing.hidden = true;
+      questions.forEach((q) => q.classList.add("is-in"));
+      return;
+    }
+    typing.hidden = false;
+    questions.forEach((q) => q.classList.remove("is-in"));
+    aiTimers.push(setTimeout(() => (typing.hidden = true), 1300));
+    questions.forEach((q, i) => aiTimers.push(setTimeout(() => q.classList.add("is-in"), 1400 + i * 350)));
+  };
+  countPicked();
+
+  // --- Marks & results ----------------------------------------------------
+  const MAX = 25;
+  const PASS = 9;
+  const MARKS = [
+    { name: "Varshini G.", m: [23, 20, 24] },
+    { name: "Venkatesh R.", m: [18, 21, 17] },
+    { name: "Ramya S.", m: [8, 15, 12] },
+    { name: "Pranav A.", m: [22, 24, 25] },
+  ];
+  const marksBody = $("#marks-table tbody");
+  const pubBtn = $("#marks-publish");
+  const pubChip = $("#marks-pub");
+
+  function drawMarks() {
+    marksBody.innerHTML = "";
+    MARKS.forEach((row, r) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.name}</td>
+        ${row.m.map((v, c) => `<td><input inputmode="numeric" maxlength="2" value="${v}" aria-label="${row.name}, subject ${c + 1}" data-r="${r}" data-c="${c}"></td>`).join("")}
+        <td class="total"></td><td class="pct"></td><td class="rk"></td>`;
+      marksBody.appendChild(tr);
+    });
+    $$("input", marksBody).forEach((input) => {
+      input.addEventListener("input", () => {
+        const value = input.value.replace(/\D/g, "").slice(0, 2);
+        input.value = value;
+        MARKS[input.dataset.r].m[input.dataset.c] = value === "" ? 0 : Math.min(MAX, Number(value));
+        if (Number(value) > MAX) input.value = String(MAX);
+        computeMarks(true);
+      });
+      input.addEventListener("focus", () => input.select());
+    });
+    computeMarks(false);
+  }
+
+  function computeMarks(flash) {
+    const totals = MARKS.map((row) => row.m.reduce((a, b) => a + b, 0));
+    const order = [...totals].sort((a, b) => b - a);
+    $$("tr", marksBody).forEach((tr, r) => {
+      const row = MARKS[r];
+      const failed = row.m.some((v) => v < PASS);
+      $$("input", tr).forEach((input, c) => input.classList.toggle("is-fail", row.m[c] < PASS));
+      const total = $(".total", tr);
+      const pct = $(".pct", tr);
+      const rank = $(".rk", tr);
+      const before = total.textContent;
+      total.innerHTML = `${totals[r]}<small style="color:var(--muted);font-size:11px">/75</small>`;
+      pct.textContent = `${Math.round((totals[r] * 1000) / 75) / 10}%`;
+      pct.className = `pct${failed ? " fail" : ""}`;
+      const place = order.indexOf(totals[r]) + 1;
+      rank.innerHTML = failed ? `<span class="fail">Fail</span>` : `<span class="rank${place === 1 ? " r1" : ""}">${place}</span>`;
+      if (flash && before && before !== total.textContent) {
+        [total, pct, rank].forEach((cell) => {
+          cell.classList.remove("flash");
+          void cell.offsetWidth;
+          cell.classList.add("flash");
+        });
+      }
+    });
+  }
+
+  pubBtn.addEventListener("click", () => {
+    const on = pubChip.textContent !== "Published";
+    pubChip.textContent = on ? "Published" : "Not published";
+    pubChip.classList.toggle("ok", on);
+    pubBtn.textContent = on ? "Unpublish" : "Publish results";
+  });
+  drawMarks();
+
+  // --- Notices ------------------------------------------------------------
+  const seenCount = $("#seen-count");
+  const seenBar = $("#seen-bar");
+  let seenTimer = null;
+  onShow.notices = () => {
+    clearInterval(seenTimer);
+    const target = 46;
+    if (reduceMotion) {
+      seenCount.textContent = target;
+      seenBar.style.width = `${(target / 60) * 100}%`;
+      return;
+    }
+    let n = 0;
+    seenCount.textContent = "0";
+    seenBar.style.width = "0%";
+    seenTimer = setInterval(() => {
+      n += 1;
+      seenCount.textContent = n;
+      seenBar.style.width = `${(n / 60) * 100}%`;
+      if (n >= target) clearInterval(seenTimer);
+    }, 55);
+  };
+
+  // --- Reports ------------------------------------------------------------
+  const repBars = $("#rep-bars");
+  onShow.reports = () => {
+    repBars.classList.remove("is-on");
+    void repBars.offsetWidth;
+    requestAnimationFrame(() => repBars.classList.add("is-on"));
+  };
+
+  // Start the tour once it is on screen.
+  whenSeen(tour, () => showTab(0), 0.25);
+
+  // ============================================================
+  // STUDENT APPS SWITCH
+  // ============================================================
+
+  const appButtons = $$("[data-app]");
+  const appSwitch = appButtons[0]?.closest(".switch");
+  appButtons.forEach((btn, index) => btn.addEventListener("click", () => {
+    appButtons.forEach((b) => {
+      b.classList.toggle("is-on", b === btn);
+      b.setAttribute("aria-selected", String(b === btn));
+    });
+    appSwitch.classList.toggle("right", index === 1);
+    $$("[data-app-panel]").forEach((panel) => (panel.hidden = panel.dataset.appPanel !== btn.dataset.app));
   }));
 
-  if (reduceMotion) flow.classList.add("paused");
+  // ============================================================
+  // AI CARDS: the conversation plays when it comes into view
+  // ============================================================
 
-  // Start the cycle only once the section is on screen.
-  if ("IntersectionObserver" in window && autoplay) {
-    const flowIo = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        showStep(stepIndex);
-        flowIo.disconnect();
-      }
-    }, { threshold: 0.3 });
-    flowIo.observe(flow);
-  } else {
-    showStep(0);
-  }
+  $$("[data-chat]").forEach((chat) => whenSeen(chat, () => chat.classList.add("is-on"), 0.5));
 
   // ============================================================
   // SAMPLE CALLS (audio and captions come from calls.js)
@@ -171,43 +427,12 @@
       const line = lineAt(call, t);
       const next = line && call.lines[call.lines.indexOf(line) + 1];
       const end = (next ? next.start : call.duration) - 0.5;
-      // A recording without captions has no pauses to show.
       const speaking = !call.lines.length || (line && t < end);
-      return {
-        height: speaking ? 35 + random() * 65 : 12 + random() * 8,
-        who: line ? line.who : "ai",
-      };
+      return { height: speaking ? 35 + random() * 65 : 12 + random() * 8, who: line ? line.who : "ai" };
     });
   }
 
-  // A language that is not ready: visible, but nothing to play.
-  function lockedCallCard(call) {
-    const card = document.createElement("article");
-    card.className = "call is-locked";
-    card.innerHTML = `
-      <div class="call-top">
-        <span>${call.kicker}</span>
-        <em class="soon">Coming soon</em>
-      </div>
-      <h3>${call.title}</h3>
-      <div class="call-agent">
-        <span class="call-initial">${call.agent[0]}</span>
-        <span><b>${call.agent}</b> · ${call.voiceLabel}</span>
-      </div>
-      <div class="call-player" aria-hidden="true">
-        <span class="call-lock">
-          <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
-        </span>
-        <div class="call-wave">
-          ${waveBars(call).map((b) => `<i style="height:${b.height.toFixed(0)}%"></i>`).join("")}
-        </div>
-      </div>`;
-    return card;
-  }
-
   function callCard(call) {
-    if (call.locked) return lockedCallCard(call);
-
     const card = document.createElement("article");
     card.className = "call";
     card.innerHTML = `
@@ -221,7 +446,7 @@
         <span><b>${call.agent}</b> · ${call.voiceLabel}</span>
         <span class="call-badge">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2 4.6 1V20A17 17 0 0 1 3 4h4l1 4.6z"/><path d="M15 3h6v6M21 3l-6.5 6.5"/></svg>
-          Outbound
+          Sample
         </span>
       </div>
       <div class="call-player">
@@ -277,7 +502,6 @@
       }
     }
 
-    // Load the MP3 only when the visitor first plays or seeks.
     function load() {
       if (audio.src) return;
       audio.preload = "auto";
@@ -294,7 +518,6 @@
     function seek(seconds) {
       const to = Math.min(Math.max(seconds, 0), call.duration - 0.1);
       load();
-      // Chrome ignores a seek before the file's length is known.
       if (audio.readyState >= 1) {
         audio.currentTime = to;
         render();
@@ -307,13 +530,11 @@
     }
 
     playBtn.addEventListener("click", () => (audio.paused ? play() : audio.pause()));
-
     wave.addEventListener("click", (event) => {
       const rect = wave.getBoundingClientRect();
       seek(((event.clientX - rect.left) / rect.width) * call.duration);
       play();
     });
-
     wave.addEventListener("keydown", (event) => {
       const step = { ArrowRight: 5, ArrowLeft: -5 }[event.key];
       if (step) {
@@ -346,8 +567,9 @@
     return card;
   }
 
+  // Only languages that are ready get a player; the rest are listed as coming.
   const callsList = $("#calls-list");
-  (window.SAMPLE_CALLS || []).forEach((call) => callsList.appendChild(callCard(call)));
+  (window.SAMPLE_CALLS || []).filter((call) => !call.locked).forEach((call) => callsList.appendChild(callCard(call)));
 
   // ============================================================
   // LIVE DEMO
@@ -512,7 +734,7 @@
     updateHint();
   });
 
-  // Start with two absentees so the demo is one click away.
+  // Two absentees to start with, so the demo is one click away.
   absent.add(1);
   absent.add(3);
   renderRegister();
