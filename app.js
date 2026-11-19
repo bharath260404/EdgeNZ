@@ -20,6 +20,27 @@
   }
 
   // ============================================================
+  // OPENING: the curtain lifts after about a second, and the page's
+  // own entrance plays as it does.
+  // ============================================================
+
+  const html = document.documentElement;
+  const intro = $("#intro");
+  const introOn = Boolean(intro) && html.classList.contains("intro-on");
+  const introDelay = introOn ? Math.max(0, 950 - performance.now()) : 0;
+  const afterIntro = (fn) => (introOn ? setTimeout(fn, introDelay + 200) : fn());
+
+  if (introOn) {
+    setTimeout(() => {
+      intro.classList.add("out");
+      html.classList.remove("intro-on");
+      setTimeout(() => intro.remove(), 800);
+    }, introDelay);
+  } else if (intro) {
+    intro.remove();
+  }
+
+  // ============================================================
   // NAV, PROGRESS, YEAR
   // ============================================================
 
@@ -51,7 +72,7 @@
   // REVEAL ON SCROLL, POINTER LIGHT ON CARDS
   // ============================================================
 
-  if ("IntersectionObserver" in window && !reduceMotion) {
+  if ("IntersectionObserver" in window && !reduceMotion) afterIntro(() => {
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -66,7 +87,8 @@
       el.style.transitionDelay = `${Math.max(0, siblings.indexOf(el)) % 4 * 80}ms`;
       io.observe(el);
     });
-  } else {
+  });
+  else {
     $$(".reveal").forEach((el) => el.classList.add("visible"));
   }
 
@@ -112,10 +134,10 @@
     requestAnimationFrame(step);
   }
 
-  whenSeen(stage, () => {
+  afterIntro(() => whenSeen(stage, () => {
     stage.classList.add("is-live");
     $$("[data-count]", stage).forEach(countUp);
-  }, 0.2);
+  }, 0.2));
 
   const toasts = $$(".toast", stage);
   let toastAt = 0;

@@ -12,10 +12,64 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- The typeface doesn't hold up the first paint; the system font shows until it arrives. -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Opening: logo and name, then the curtain lifts. Once per visit; the
+       CSS hides it on its own even if the script never runs. -->
+  <style>
+    #intro {
+      position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow: hidden;
+      background: radial-gradient(120% 80% at 50% 0%, #1e3a8a 0%, #0a1a3f 55%, #050b1f 100%); color: #fff;
+      animation: intro-auto .5s ease 3s forwards;
+      transition: transform .75s cubic-bezier(.76, 0, .24, 1);
+    }
+    #intro.out { transform: translateY(-100%); }
+    html.no-intro #intro { display: none; }
+    html.intro-on body { overflow: hidden; }
+    #intro .in-glow { position: absolute; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(96, 165, 250, .3), transparent 65%); }
+    #intro .in-center { position: relative; display: grid; justify-items: center; gap: 16px; transition: opacity .35s ease, transform .6s cubic-bezier(.76, 0, .24, 1); }
+    #intro.out .in-center { opacity: 0; transform: translateY(-40px); }
+    #intro .in-logo { width: 78px; height: 78px; border-radius: 20px; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .55); animation: in-pop .6s cubic-bezier(.2, .9, .25, 1.25) both; }
+    #intro .in-name { font-size: clamp(30px, 5vw, 42px); font-weight: 800; letter-spacing: -.03em; animation: in-rise .6s cubic-bezier(.2, .8, .2, 1) .15s both; }
+    #intro .in-name em { font-style: normal; color: #93c5fd; }
+    #intro .in-line { width: 0; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #2563eb, #6366f1, #06b6d4); animation: in-line .7s cubic-bezier(.2, .8, .2, 1) .3s forwards; }
+    @keyframes in-pop { from { opacity: 0; transform: scale(.55) translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes in-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @keyframes in-line { to { width: 150px; } }
+    @keyframes intro-auto { to { opacity: 0; visibility: hidden; } }
+  </style>
+  <script>
+    (function () {
+      var html = document.documentElement;
+      var seen = false;
+      try {
+        seen = sessionStorage.getItem("cr-intro") === "1";
+        sessionStorage.setItem("cr-intro", "1");
+      } catch (e) {}
+      var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      html.classList.add(seen || calm ? "no-intro" : "intro-on");
+      // Never leave the page unscrollable, even if app.js doesn't load.
+      setTimeout(function () { html.classList.remove("intro-on"); }, 3600);
+    })();
+  </script>
 </head>
 <body class="home">
+
+<div id="intro" aria-hidden="true">
+  <div class="in-glow"></div>
+  <div class="in-center">
+    <svg class="in-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="in-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
+      <rect width="64" height="64" rx="16" fill="url(#in-g)" stroke="none"/>
+      <path d="M18 20h28a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H30l-8 7v-7h-4a4 4 0 0 1-4-4V24a4 4 0 0 1 4-4z" fill="#fff" stroke="none"/>
+      <path d="M24 31.5l5 5 11-11" fill="none" stroke="#1D4ED8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="in-name">Callroll <em>AI</em></div>
+    <div class="in-line"></div>
+  </div>
+</div>
 
 <!-- Icons, used with <svg><use href="#i-name"/></svg> -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
