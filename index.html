@@ -795,23 +795,46 @@
         </ul>
       </div>
 
-      <form class="cta-form" id="contact-form" novalidate>
+      <form class="cta-form" id="contact-form" novalidate data-api="https://callroll-api.onrender.com">
         <div class="field-row">
-          <label>Your name<input name="name" required autocomplete="name"></label>
-          <label>Phone<input name="phone" type="tel" required autocomplete="tel" placeholder="+91"></label>
+          <label>Your name<input name="name" required minlength="2" maxlength="80" autocomplete="name"></label>
+          <label>Phone or WhatsApp<input name="phone" type="tel" required maxlength="20" autocomplete="tel" inputmode="tel" placeholder="+91"></label>
         </div>
-        <label>School or college<input name="institution" required autocomplete="organization"></label>
-        <label>Number of students
-          <select name="size">
-            <option>Under 300</option>
-            <option>300 – 1,000</option>
-            <option>1,000 – 3,000</option>
-            <option>Over 3,000</option>
-          </select>
-        </label>
+        <label>School or college<input name="institution" required minlength="2" maxlength="120" autocomplete="organization"></label>
+        <div class="field-row">
+          <label>You are
+            <select name="role">
+              <option>Principal / Correspondent</option>
+              <option>Office / Admin</option>
+              <option>Teacher / HOD</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Number of students
+            <select name="size">
+              <option>Under 300</option>
+              <option>300 – 1,000</option>
+              <option>1,000 – 3,000</option>
+              <option>Over 3,000</option>
+            </select>
+          </label>
+        </div>
+        <div class="field-row">
+          <label><span>Email <small>optional</small></span><input name="email" type="email" maxlength="254" autocomplete="email"></label>
+          <label><span>City <small>optional</small></span><input name="city" maxlength="60" autocomplete="address-level2"></label>
+        </div>
+        <label><span>Anything we should know? <small>optional</small></span><textarea name="message" rows="2" maxlength="1000"></textarea></label>
+        <!-- Left empty by people; bots fill it in. -->
+        <label class="hp" aria-hidden="true">Company website<input name="company_website" tabindex="-1" autocomplete="off"></label>
         <button class="btn btn-white btn-block btn-lg" type="submit">Request a demo</button>
-        <p class="form-note" id="form-note">Opens your email app with the details filled in.</p>
+        <p class="form-note" id="form-note" role="status">We'll call you within one working day. Your details are only used to arrange the demo and are never shared. <a href="privacy.html">Privacy</a></p>
       </form>
+      <div class="cta-form cta-done" id="form-done" hidden>
+        <span class="done-tick" aria-hidden="true">✓</span>
+        <h3>Thanks, <span data-done-name></span>!</h3>
+        <p>We'll call you on <strong data-done-phone></strong> within one working day to fix a time for the demo.</p>
+        <button type="button" class="btn btn-ghost-light" id="form-again">Send another request</button>
+      </div>
     </div>
   </div>
 </section>

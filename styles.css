@@ -667,6 +667,20 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .cta-form input:focus, .cta-form select:focus { outline: none; border-color: var(--blue-300); }
 .cta-form input.invalid { border-color: #fca5a5; }
 .form-note { font-size: 13px; text-align: center; color: #c7d2ee; }
+.form-note a { color: var(--white); text-decoration: underline; text-underline-offset: 2px; }
+.form-note.is-error { color: #fecaca; }
+.cta-form textarea { font: inherit; font-size: 15px; font-weight: 500; color: var(--navy); width: 100%; padding: 12px 14px; border-radius: 12px; border: 2px solid transparent; background: var(--white); resize: vertical; min-height: 64px; }
+.cta-form textarea:focus { outline: none; border-color: var(--blue-300); }
+.cta-form label small { margin-left: 4px; font-weight: 600; color: #a5b4d8; }
+.cta-form button[disabled] { opacity: .7; cursor: progress; }
+.cta-form .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.cta-form[hidden] { display: none; }
+.cta-done { text-align: center; justify-items: center; align-content: center; min-height: 320px; color: var(--white); }
+.cta-done h3 { margin: 6px 0 0; font-size: 24px; color: var(--white); }
+.cta-done p { margin: 0; max-width: 34ch; color: #dbe4ff; line-height: 1.55; }
+.done-tick { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(34, 197, 94, .2); color: #86efac; font-size: 32px; font-weight: 800; box-shadow: 0 0 0 8px rgba(34, 197, 94, .08); }
+.btn-ghost-light { background: transparent; color: var(--white); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .45); }
+.btn-ghost-light:hover { background: rgba(255, 255, 255, .1); }
 
 /* ---------- Footer ---------- */
 

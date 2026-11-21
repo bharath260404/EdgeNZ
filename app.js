@@ -763,37 +763,130 @@
   updateHint();
 
   // ============================================================
-  // CONTACT FORM → email app
+  // CONTACT FORM → saved by Callroll (with WhatsApp / email as backup)
   // ============================================================
 
   const form = $("#contact-form");
+  const done = $("#form-done");
+  const note = $("#form-note");
+  const button = $("button[type=submit]", form);
   const email = $("[data-contact-email]").getAttribute("href").replace("mailto:", "");
+  const whatsapp = "919391795567";
+  const openedAt = Date.now();
+  const firstNote = note.innerHTML;
 
-  form.addEventListener("submit", (event) => {
+  const phoneOk = (value) => {
+    const digits = value.replace(/\D/g, "");
+    if (digits.length === 10) return /^[6-9]/.test(digits);
+    return digits.length >= 11 && digits.length <= 15;
+  };
+  const emailOk = (value) => !value || /^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/.test(value);
+
+  const summary = (data) =>
+    [
+      `Demo request: ${data.institution}`,
+      `Name: ${data.name} (${data.role})`,
+      `Phone: ${data.phone}`,
+      data.email && `Email: ${data.email}`,
+      data.city && `City: ${data.city}`,
+      `Students: ${data.size}`,
+      data.message && `Note: ${data.message}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+  // If sending fails, offer WhatsApp and email with everything filled in.
+  const showBackup = (data) => {
+    const text = summary(data);
+    note.classList.add("is-error");
+    note.textContent = "Couldn't send just now. Please send it by ";
+    const wa = document.createElement("a");
+    wa.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
+    wa.target = "_blank";
+    wa.rel = "noopener noreferrer";
+    wa.textContent = "WhatsApp";
+    const mail = document.createElement("a");
+    mail.href = `mailto:${email}?subject=${encodeURIComponent(`Demo request — ${data.institution}`)}&body=${encodeURIComponent(text)}`;
+    mail.textContent = "email";
+    note.append(wa, " or ", mail, " instead. Your details are already filled in.");
+  };
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    let valid = true;
+    if (form.dataset.sending) return;
 
-    $$("[required]", form).forEach((input) => {
-      const ok = input.value.trim().length > 1;
-      input.classList.toggle("invalid", !ok);
-      valid = valid && ok;
-    });
-
-    if (!valid) {
-      $("#form-note").textContent = "Please fill in your name, phone and institution.";
+    const data = Object.fromEntries(new FormData(form).entries());
+    for (const key of Object.keys(data)) data[key] = String(data[key]).trim();
+    const problems = {
+      name: data.name.length < 2,
+      phone: !phoneOk(data.phone),
+      institution: data.institution.length < 2,
+      email: !emailOk(data.email),
+    };
+    for (const [key, bad] of Object.entries(problems)) form.elements[key].classList.toggle("invalid", bad);
+    if (Object.values(problems).some(Boolean)) {
+      note.classList.add("is-error");
+      note.textContent = problems.phone && data.phone
+        ? "Please check the phone number."
+        : problems.email
+          ? "Please check the email address, or leave it empty."
+          : "Please fill in your name, phone and school or college.";
       return;
     }
 
-    const data = new FormData(form);
-    const subject = `Demo request — ${data.get("institution")}`;
-    const body = [
-      `Name: ${data.get("name")}`,
-      `Phone: ${data.get("phone")}`,
-      `Institution: ${data.get("institution")}`,
-      `Students: ${data.get("size")}`,
-    ].join("\n");
+    form.dataset.sending = "1";
+    button.disabled = true;
+    button.textContent = "Sending…";
+    note.classList.remove("is-error");
+    note.textContent = "Sending your request…";
 
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    $("#form-note").textContent = "Thanks! Your email app should open now.";
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 20000);
+    try {
+      const response = await fetch(`${form.dataset.api}/public/demo-requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "omit",
+        referrerPolicy: "no-referrer",
+        signal: controller.signal,
+        body: JSON.stringify({ ...data, page: location.pathname, elapsed_ms: Date.now() - openedAt }),
+      });
+      if (response.ok) {
+        $("[data-done-name]", done).textContent = data.name.split(" ")[0];
+        $("[data-done-phone]", done).textContent = data.phone;
+        form.hidden = true;
+        done.hidden = false;
+        form.reset();
+        note.innerHTML = firstNote;
+      } else if (response.status === 400 || response.status === 422) {
+        const reply = await response.json().catch(() => ({}));
+        note.classList.add("is-error");
+        note.textContent = typeof reply.detail === "string" ? reply.detail : "Please check your details and try again.";
+      } else {
+        showBackup(data);
+      }
+    } catch {
+      showBackup(data);
+    } finally {
+      clearTimeout(timer);
+      delete form.dataset.sending;
+      button.disabled = false;
+      button.textContent = "Request a demo";
+    }
+  });
+
+  // Typing again puts the usual note back after a problem.
+  form.addEventListener("input", (event) => {
+    event.target.classList.remove("invalid");
+    if (note.classList.contains("is-error") && !form.dataset.sending) {
+      note.classList.remove("is-error");
+      note.innerHTML = firstNote;
+    }
+  });
+
+  $("#form-again").addEventListener("click", () => {
+    done.hidden = true;
+    form.hidden = false;
+    form.elements.name.focus();
   });
 })();
