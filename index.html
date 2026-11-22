@@ -98,6 +98,8 @@
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></symbol>
   <symbol id="i-game" viewBox="0 0 24 24"><path d="M7.5 8.5h9a4.5 4.5 0 0 1 4.5 4.5v1.2a2.8 2.8 0 0 1-5 1.7l-1-1.4h-6l-1 1.4a2.8 2.8 0 0 1-5-1.7V13a4.5 4.5 0 0 1 4.5-4.5zM8 11.2v3M6.5 12.7h3"/></symbol>
   <symbol id="i-excel" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M4 14h16M10 4v16"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h12l-2.5 4L17 12H5"/></symbol>
+  <symbol id="i-suitcase" viewBox="0 0 24 24"><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M4 7h16v12H4V7zM4 12.5h16"/></symbol>
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
 </svg>
 
@@ -121,6 +123,7 @@
     <nav class="nav-links" id="nav-links" aria-label="Main">
       <a href="#platform">Platform</a>
       <a href="#students">Student apps</a>
+      <a href="#parents">Parents</a>
       <a href="#ai">AI</a>
       <a href="#demo">Live demo</a>
       <a href="#security">Security</a>
@@ -321,6 +324,9 @@
         <button class="tour-tab" role="tab" aria-selected="false" aria-controls="tp-reports" id="tt-reports" data-tab="reports">
           <svg><use href="#i-chart"/></svg><span><b>Reports</b><small>Department to register</small></span><i class="tab-bar"></i>
         </button>
+        <button class="tour-tab" role="tab" aria-selected="false" aria-controls="tp-watch" id="tt-watch" data-tab="watch">
+          <svg><use href="#i-flag"/></svg><span><b>Early warnings</b><small>Who needs help, and why</small></span><i class="tab-bar"></i>
+        </button>
       </div>
 
       <div class="tour-stage">
@@ -477,6 +483,41 @@
             </div>
           </div>
         </div>
+
+        <!-- Early warnings -->
+        <div class="tour-panel" role="tabpanel" id="tp-watch" aria-labelledby="tt-watch" data-panel="watch" hidden>
+          <div class="tp-copy">
+            <h3>See who is slipping, before the exams do</h3>
+            <p>Callroll reads attendance and marks and lists the students who need attention, with the reason in plain words. Days on leave a parent asked for don't count as a streak, a habit or a fall. Teachers note what they did, so the principal sees it was handled.</p>
+            <ul class="ticks">
+              <li>Below 75%, with how many classes they must attend</li>
+              <li>Days absent in a row, the same weekday again and again</li>
+              <li>Failed subjects, or marks that fell since the last exam</li>
+              <li>A Monday email to the principal and each HOD: last week at a glance</li>
+            </ul>
+          </div>
+          <div class="mock mock-watch">
+            <div class="m-head"><span><b>Students to watch</b><small>Class 9 · B · worked out today</small></span><span class="m-chip red">1 to act on now</span></div>
+            <ul class="watch-list">
+              <li class="w-high">
+                <div class="w-top"><b>Pooja M.</b><em>Act now</em></div>
+                <span>Absent the last 4 school days in a row</span>
+                <span>Attendance 71%: must attend the next 2 days</span>
+                <button type="button" class="w-btn" data-watch-note="Called the father: down with typhoid, back on Monday">Note what was done</button>
+              </li>
+              <li class="w-mid">
+                <div class="w-top"><b>Aarav K.</b><em>Keep an eye</em></div>
+                <span>Came to 5 of the last 10 days, down from 100%</span>
+                <button type="button" class="w-btn" data-watch-note="Met the mother at pick-up, will check homework daily">Note what was done</button>
+              </li>
+              <li class="w-low">
+                <div class="w-top"><b>Varun V.</b><em>Worth a look</em></div>
+                <span>Absent on 3 of the last 6 Mondays</span>
+                <button type="button" class="w-btn" data-watch-note="Asked the class teacher to talk to him this week">Note what was done</button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -553,6 +594,69 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PARENTS ============================== -->
+<section class="section section-soft" id="parents">
+  <div class="container students parents">
+    <div class="students-visual reveal">
+      <div class="device" data-pview-panel="leave">
+        <div class="d-screen">
+          <div class="d-hero teal">
+            <small>Parents</small><strong>Lakshmi Reddy</strong><span>Class 8 · A · Green Valley School</span>
+          </div>
+          <div class="d-card leave-card">
+            <b>Ask for leave</b>
+            <div class="lv-dates"><span><small>From</small>Thu 4 Dec</span><span><small>To</small>Fri 5 Dec</span></div>
+            <span class="lv-why">“Cousin's wedding in Guntur”</span>
+            <button type="button" class="lv-ask" id="lv-ask">Ask for 2 days</button>
+            <span class="lv-state" id="lv-state" role="status" aria-live="polite" hidden></span>
+          </div>
+          <div class="d-card ring-card">
+            <div class="mini-ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" class="track"/><circle cx="18" cy="18" r="15.5" class="fill"/></svg><b>94%</b></div>
+            <span><b>113 of 120 days</b><small class="ok">Above 75% · well done</small></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="device" data-pview-panel="report" hidden>
+        <div class="d-screen">
+          <div class="d-card rc-mini">
+            <div class="rcm-head"><span class="rcm-logo" aria-hidden="true">GV</span><span><b>Green Valley School</b><small>Report card · Half-yearly</small></span></div>
+            <table>
+              <tr><th>English</th><td>88<small>/100</small></td></tr>
+              <tr><th>Maths</th><td>92<small>/100</small></td></tr>
+              <tr><th>Science</th><td>75<small>/100</small></td></tr>
+              <tr class="rcm-total"><th>Total</th><td>255<small>/300</small></td></tr>
+            </table>
+            <div class="rcm-boxes"><span><small>Result</small><b class="ok">Passed</b></span><span><small>Attendance</small><b>94%</b></span></div>
+            <p class="rcm-remark">“Outstanding work, Lakshmi. Strong in Maths and English.”<small>Class teacher</small></p>
+            <span class="rcm-pdf">Save as PDF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="students-copy reveal">
+      <span class="kicker">Parents' app</span>
+      <h2>Parents see their child's day, and tell you before they're away.</h2>
+      <p>Parents sign in with the mobile number or email they gave the school. There's no password and nothing to install, and they see only their own children.</p>
+
+      <div class="switch pswitch" role="tablist" aria-label="Parents' app">
+        <button role="tab" aria-selected="true" class="is-on" data-pview="leave">Ask for leave</button>
+        <button role="tab" aria-selected="false" data-pview="report">Report card</button>
+        <span class="switch-pill" aria-hidden="true"></span>
+      </div>
+
+      <ul class="app-points">
+        <li><svg><use href="#i-calendar"/></svg><span><b>Attendance, day by day</b>Every absence on a calendar. If the school asks why, they answer in a tap.</span></li>
+        <li><svg><use href="#i-suitcase"/></svg><span><b>Leave, asked ahead</b>The class teacher approves it, the register shows it, and nobody chases the parent about those days.</span></li>
+        <li><svg><use href="#i-file"/></svg><span><b>Report cards</b>Marks, attendance and the class teacher's remark, with your logo. Save as PDF.</span></li>
+        <li><svg><use href="#i-megaphone"/></svg><span><b>Results and notices</b>Published marks and test scores, and your notices.</span></li>
+      </ul>
+      <p class="fine">Sign-in codes go by email today, from your school's own mailbox. WhatsApp codes follow once Meta approves our WhatsApp Business account.</p>
     </div>
   </div>
 </section>
@@ -670,6 +774,7 @@
           <li>Live dashboard and late comers</li>
           <li>Students, faculty, classes and courses</li>
           <li>Timetables, exams, notices, reports</li>
+          <li>Students to watch, and a Monday email</li>
         </ul>
       </article>
       <article class="role reveal spot">
@@ -679,6 +784,7 @@
           <li>Their department's dashboard and report</li>
           <li>Timetables and exams for their classes</li>
           <li>Correct saved attendance and marks</li>
+          <li>Their department's Monday email</li>
         </ul>
       </article>
       <article class="role reveal spot">
@@ -688,6 +794,7 @@
           <li>Their own week and attendance</li>
           <li>Materials, tests, marks and notices</li>
           <li>An AI assistant for their classes</li>
+          <li>Leave requests and report card remarks</li>
         </ul>
       </article>
       <article class="role reveal spot">
@@ -734,6 +841,8 @@
       <li class="reveal"><span class="tg-icon"><svg><use href="#i-lock"/></svg></span><b>Locked once saved</b><small>Saved attendance and published marks change only by the admin or HOD.</small></li>
       <li class="reveal"><span class="tg-icon"><svg><use href="#i-phone"/></svg></span><b>App lock</b><small>A PIN or password on the phone, so a borrowed phone can't mark anything.</small></li>
       <li class="reveal"><span class="tg-icon"><svg><use href="#i-signal"/></svg></span><b>Weak signal? Still works</b><small>Attendance saves on the phone and sends itself when the network is back.</small></li>
+      <li class="reveal"><span class="tg-icon"><svg><use href="#i-users"/></svg></span><b>Parents see only their child</b><small>One-time sign-in codes, no passwords. Change a parent's number and the old sign-in sees nothing.</small></li>
+      <li class="reveal"><span class="tg-icon"><svg><use href="#i-mail"/></svg></span><b>Your own mailbox</b><small>Emails to parents and staff go from the school's own address, never ours.</small></li>
       <li class="reveal"><span class="tg-icon"><svg><use href="#i-chat"/></svg></span><b>Official channels only</b><small>Parent messages will use Meta's WhatsApp Business Platform, never unofficial tools.</small></li>
     </ul>
   </div>
@@ -750,11 +859,11 @@
     <div class="faq reveal">
       <details>
         <summary>What works today, and what is coming?</summary>
-        <p>Available today: attendance for schools and colleges, timetables and classroom QR panels, reports and the monthly register, Excel import, study materials, tests and quizzes with AI question writing, marks and results, notices, the college student app, Studysy for school students, and the AI assistant for staff. Coming soon: WhatsApp alerts and replies from parents, then AI voice calls, and parent-teacher meetings.</p>
+        <p>Available today: attendance for schools and colleges, timetables and classroom QR panels, reports and the monthly register, Excel import, study materials, tests and quizzes with AI question writing, marks and results with printable report cards, notices, leave requests, students to watch with a Monday summary email, the college student app, Studysy for school students, the parents' app, emails to parents from your own mailbox, and the AI assistant for staff. Coming soon: WhatsApp alerts and replies from parents, then AI voice calls, and parent-teacher meetings.</p>
       </details>
       <details>
         <summary>Do students or parents need to install anything?</summary>
-        <p>No. Students open their app in the browser on any phone, and can add it to their home screen. When parent follow-ups launch, parents will get a normal WhatsApp message.</p>
+        <p>No. Students and parents open their apps in the browser on any phone, and can add them to the home screen. Parents sign in with a one-time code instead of a password. When WhatsApp follow-ups launch, parents will get a normal WhatsApp message.</p>
       </details>
       <details>
         <summary>Does it work for colleges as well as schools?</summary>
@@ -856,6 +965,7 @@
       <h4>Product</h4>
       <a href="#platform">Platform</a>
       <a href="#students">Student apps</a>
+      <a href="#parents">Parents</a>
       <a href="#ai">AI</a>
       <a href="#demo">Live demo</a>
     </div>

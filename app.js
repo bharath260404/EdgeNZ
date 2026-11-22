@@ -419,6 +419,57 @@
   }));
 
   // ============================================================
+  // EARLY WARNINGS: note what was done
+  // ============================================================
+
+  $$("[data-watch-note]").forEach((btn) => btn.addEventListener("click", () => {
+    const note = document.createElement("p");
+    note.className = "w-note";
+    note.textContent = `✓ ${btn.dataset.watchNote}`;
+    btn.replaceWith(note);
+  }));
+
+  // ============================================================
+  // PARENTS' APP: leave and report card
+  // ============================================================
+
+  const pButtons = $$("[data-pview]");
+  const pSwitch = pButtons[0]?.closest(".switch");
+  pButtons.forEach((btn, index) => btn.addEventListener("click", () => {
+    pButtons.forEach((b) => {
+      b.classList.toggle("is-on", b === btn);
+      b.setAttribute("aria-selected", String(b === btn));
+    });
+    pSwitch?.classList.toggle("right", index === 1);
+    $$("[data-pview-panel]").forEach((panel) => (panel.hidden = panel.dataset.pviewPanel !== btn.dataset.pview));
+  }));
+
+  const leaveAsk = $("#lv-ask");
+  const leaveState = $("#lv-state");
+  let leaveTimer = null;
+  leaveAsk?.addEventListener("click", () => {
+    if (leaveAsk.dataset.done) {
+      // Again: back to the start.
+      delete leaveAsk.dataset.done;
+      leaveAsk.textContent = "Ask for 2 days";
+      leaveState.hidden = true;
+      return;
+    }
+    leaveAsk.disabled = true;
+    leaveState.hidden = false;
+    leaveState.className = "lv-state wait";
+    leaveState.textContent = "Waiting for the school…";
+    clearTimeout(leaveTimer);
+    leaveTimer = setTimeout(() => {
+      leaveState.className = "lv-state ok";
+      leaveState.textContent = "✓ Approved by the class teacher";
+      leaveAsk.disabled = false;
+      leaveAsk.dataset.done = "1";
+      leaveAsk.textContent = "Try again";
+    }, reduceMotion ? 300 : 1600);
+  });
+
+  // ============================================================
   // AI CARDS: the conversation plays when it comes into view
   // ============================================================
 
